@@ -148,13 +148,29 @@ bins3 <- c(1, 5000, 10000, 20000, 40000, 52000)
 pal3 <- colorBin("Reds", domain = casos_p$positivos, bins = bins3)
 at <- seq(1:800)
 pal2 <- colorBin('Accent', domain = at , na.color = "transparent")
+
+ 
+
+awesome <- makeAwesomeIcon(
+  icon= "hospital",
+  iconColor = "darkblue",
+  markerColor = "lightblue",
+  library = "fa"
+)
+
+
+
+
+
 renderLeaflet({
   registros <-
     filtrarRegistros()
   
   canton_centro <-
   st_point_on_surface(registros)
-  ebais_c <- ebais[registros, , op = st_within ]
+  
+  
+  ebais <- ebais [registros, , op = st_within ]
 
   
   leaflet() %>%
@@ -207,34 +223,31 @@ renderLeaflet({
       opacity = 1,
       title = "Casos Positivos"
     ) %>%
-      addCircleMarkers(
+    
+    
+    
+      addAwesomeMarkers(
       data = ebais,
-      radius = 1,
-      group = "Ebais"
+      group = "Ebais",
+      icon = awesome
     ) %>%
+      
+
     
-    
-    addPolygons(
-      data = ebais_c,
-      color = "greenyellow",
-      fillOpacity = 0.7,
-      weight = 1,
-      opacity = 7,
-      smoothFactor = 0.7,
-      stroke = FALSE,
-      group = "Ebais C"
-    
-    )  %>%
     addCircleMarkers(
       data = canton_centro,
       radius = 2,
       fillColor= "black",
       group = "Centroides Cantones"
     ) %>%
+    
+    
+    
+    
     addLayersControl(
       "bottomleft",
       baseGroups = c("OSM", "NatGeo", "CartoDB-Black"),
-      overlayGroups = c("Casos Activos", "Casos Positivos", "Ebais", "Ebais C", "Centroides Cantones"),
+      overlayGroups = c("Casos Activos", "Casos Positivos", "Ebais", "Centroides Cantones"),
       options = layersControlOptions(collapsed = TRUE)
     ) %>%
     addScaleBar("bottomright") %>%
