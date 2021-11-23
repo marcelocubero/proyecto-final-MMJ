@@ -27,6 +27,7 @@ library(shinyWidgets)
 library(rgdal)
 library(tidyverse)
 library(rmapshaper)
+library(leaflegend)
 ```
 
 ```{r datos , warning=FALSE, message=FALSE}
@@ -167,11 +168,11 @@ renderLeaflet({
     filtrarRegistros()
   
   canton_centro <-
-  st_point_on_surface(registros)
+    st_point_on_surface(registros)
   
   
-  ebais <- ebais [registros, , op = st_within ]
-
+  ebais <- ebais [registros, , op = st_within]
+  
   
   leaflet() %>%
     addTiles(group = "OSM") %>%
@@ -223,31 +224,27 @@ renderLeaflet({
       opacity = 1,
       title = "Casos Positivos"
     ) %>%
-    
-    
-    
-      addAwesomeMarkers(
+    addAwesomeMarkers(
       data = ebais,
       group = "Ebais",
-      icon = awesome
+      icon = awesome,
+      clusterOptions = markerClusterOptions()
     ) %>%
-      
-
-    
     addCircleMarkers(
       data = canton_centro,
       radius = 2,
-      fillColor= "black",
+      fillColor = "black",
       group = "Centroides Cantones"
     ) %>%
-    
-    
-    
-    
     addLayersControl(
       "bottomleft",
       baseGroups = c("OSM", "NatGeo", "CartoDB-Black"),
-      overlayGroups = c("Casos Activos", "Casos Positivos", "Ebais", "Centroides Cantones"),
+      overlayGroups = c(
+        "Casos Activos",
+        "Casos Positivos",
+        "Ebais",
+        "Centroides Cantones"
+      ),
       options = layersControlOptions(collapsed = TRUE)
     ) %>%
     addScaleBar("bottomright") %>%
