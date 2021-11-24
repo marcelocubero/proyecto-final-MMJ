@@ -147,10 +147,8 @@ bins <- c(10, 100, 500, 1000, 4000, 7600)
 pal <- colorBin("YlOrBr", domain = casos_p$activos, bins = bins)
 bins3 <- c(1, 5000, 10000, 20000, 40000, 52000)
 pal3 <- colorBin("Reds", domain = casos_p$positivos, bins = bins3)
-at <- seq(1:800)
-pal2 <- colorBin('Accent', domain = at , na.color = "transparent")
-
- 
+#at <- seq(1:800)
+#pal2 <- colorBin('Accent', domain = at , na.color = "transparent")
 
 awesome <- makeAwesomeIcon(
   icon= "hospital",
@@ -158,10 +156,6 @@ awesome <- makeAwesomeIcon(
   markerColor = "lightblue",
   library = "fa"
 )
-
-
-
-
 
 renderLeaflet({
   registros <-
@@ -189,15 +183,15 @@ renderLeaflet({
       group = "Casos Activos",
       popup = paste0(
         "<strong>Cantón: </strong>",
-        casos_p$canton,
+        registros$canton,
         "<br>",
         "<strong>Casos activos: </strong>",
-        casos_p$activos
+        registros$activos
       )
     ) %>%
     addLegend(
       pal = pal,
-      values = casos_p$activos,
+      values = registros$activos,
       opacity = 1,
       title = "Casos Activos"
     ) %>%
@@ -212,15 +206,15 @@ renderLeaflet({
       group = "Casos Positivos",
       popup = paste0(
         "<strong>Cantón: </strong>",
-        casos_p$canton,
+        registros$canton,
         "<br>",
         "<strong>Casos positivos: </strong>",
-        casos_p$positivos
+        registros$positivos
       )
     ) %>%
     addLegend(
       pal = pal3,
-      values = casos_p$activos,
+      values = registros$activos,
       opacity = 1,
       title = "Casos Positivos"
     ) %>%
